@@ -37,7 +37,7 @@ public class Student implements HasID<String> {
 
     @Override
     public String toString() {
-        return "Student{" + "idStudent=" + idStudent + ", nume='" + nume + '\'' + ", grupa=" + grupa + '\'' + '}';
+        return "Student{idStudent=" + idStudent + ", nume='" + nume + "', grupa=" + grupa + "}";
     }
 
     @Override

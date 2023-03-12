@@ -35,7 +35,7 @@ public class Tema implements HasID<String> {
 
     @Override
     public String toString() {
-        return "Tema{" + "id='" + idTema + "', descriere='" + descriere + ", deadline=" + deadline +
+        return "Tema{" + "id='" + idTema + "', descriere='" + descriere + "', deadline=" + deadline +
                 ", startline=" + startline + '}';
     }
 
