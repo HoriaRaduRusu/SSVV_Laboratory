@@ -1,6 +1,7 @@
 package repository;
 
-import validation.ValidationException;
+import exceptions.AlreadyExistingEntityException;
+import exceptions.ValidationException;
 
 public interface CRUDRepository<ID, E> {
     /**
@@ -20,8 +21,9 @@ public interface CRUDRepository<ID, E> {
      * @return null- if the given entity is saved; otherwise returns the entity (id already exists)
      * @throws ValidationException if the entity is not valid
      * @throws IllegalArgumentException if the given entity is null.
+     * @throws AlreadyExistingEntityException if an entity with the same ID already exists
      **/
-    E save(E entity) throws ValidationException;
+    E save(E entity) throws ValidationException, AlreadyExistingEntityException;
 
     /**
      * removes the entity with the specified id

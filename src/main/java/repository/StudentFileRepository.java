@@ -1,7 +1,7 @@
 package repository;
 
 import domain.Student;
-import validation.ValidationException;
+import exceptions.ValidationException;
 import validation.Validator;
 
 import java.io.*;

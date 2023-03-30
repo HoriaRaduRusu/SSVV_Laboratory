@@ -1,5 +1,6 @@
 package validation;
 import domain.Nota;
+import exceptions.ValidationException;
 
 public class NotaValidator implements Validator<Nota> {
     public void validate(Nota nota) throws ValidationException {

@@ -3,6 +3,9 @@ package console;
 import domain.Nota;
 import domain.Student;
 import domain.Tema;
+import exceptions.AlreadyExistingEntityException;
+import exceptions.GradeNonExistentStudentOrHomeworkException;
+import exceptions.ValidationException;
 import service.Service;
 
 import java.util.Scanner;
@@ -63,11 +66,11 @@ public class UI {
         System.out.println("Introduceti grupa studentului: ");
         int grupa = scanner.nextInt();
 
-        if (service.saveStudent(id, nume, grupa) != 0) {
+        try {
+            service.saveStudent(id, nume, grupa);
             System.out.println("Student adaugat cu succes! \n");
-        }
-        else {
-            System.out.println("Student existent sau invalid! \n");
+        } catch (ValidationException | AlreadyExistingEntityException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -86,11 +89,11 @@ public class UI {
         System.out.println("Introduceti saptamana startline a temei: ");
         int startline = scanner.nextInt();
 
-        if (service.saveTema(id, descriere, deadline, startline) != 0) {
+        try {
+            service.saveTema(id, descriere, deadline, startline);
             System.out.println("Tema adaugata cu succes! \n");
-        }
-        else {
-            System.out.println("Tema existenta sau invalida! \n");
+        } catch (ValidationException | AlreadyExistingEntityException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -114,16 +117,11 @@ public class UI {
         System.out.println("Dati un feedback temei: ");
         String feedback = scanner.nextLine();
 
-        int result = service.saveNota(idStudent, idTema, valNota, predata, feedback);
-        if (result == 1) {
+        try {
+            service.saveNota(idStudent, idTema, valNota, predata, feedback);
             service.createStudentFile(idStudent, idTema);
-            System.out.println("Nota adaugata cu succes! \n");
-        }
-        else if (result == 0) {
-            System.out.println("Nota existenta! \n");
-        }
-        else {
-            System.out.println("Student sau tema inexistenta! \n");
+        } catch (ValidationException | AlreadyExistingEntityException | GradeNonExistentStudentOrHomeworkException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
