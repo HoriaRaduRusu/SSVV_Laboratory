@@ -1,12 +1,13 @@
 package repository;
 
 import domain.HasID;
+import exceptions.AlreadyExistingEntityException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import validation.ValidationException;
+import exceptions.ValidationException;
 import validation.Validator;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -85,11 +86,9 @@ public abstract class AbstractXMLRepository<ID, E extends HasID<ID>> extends Abs
     }
 
     @Override
-    public E save(E entity) throws ValidationException {
+    public E save(E entity) throws ValidationException, AlreadyExistingEntityException {
         E result = super.save(entity);
-        if (result == null) {
-            writeToXmlFile();
-        }
+        writeToXmlFile();
         return result;
     }
 

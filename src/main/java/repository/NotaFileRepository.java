@@ -2,7 +2,7 @@ package repository;
 
 import domain.Nota;
 import domain.Pair;
-import validation.ValidationException;
+import exceptions.ValidationException;
 import validation.Validator;
 
 import java.io.*;

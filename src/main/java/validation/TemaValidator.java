@@ -1,5 +1,6 @@
 package validation;
 import domain.Tema;
+import exceptions.ValidationException;
 
 public class TemaValidator implements Validator<Tema> {
     public void validate(Tema tema) throws ValidationException {

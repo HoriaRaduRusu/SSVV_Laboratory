@@ -4,6 +4,9 @@ import domain.Nota;
 import domain.Pair;
 import domain.Student;
 import domain.Tema;
+import exceptions.AlreadyExistingEntityException;
+import exceptions.GradeNonExistentStudentOrHomeworkException;
+import exceptions.ValidationException;
 import repository.NotaXMLRepository;
 import repository.StudentXMLRepository;
 import repository.TemaXMLRepository;
@@ -29,29 +32,17 @@ public class Service {
 
     public Iterable<Nota> findAllNote() { return notaXmlRepo.findAll(); }
 
-    public int saveStudent(String id, String nume, int grupa) {
-        Student student = new Student(id, nume, grupa);
-        Student result = studentXmlRepo.save(student);
-
-        if (result == null) {
-            return 1;
-        }
-        return 0;
+    public void saveStudent(String id, String nume, int grupa) throws ValidationException, AlreadyExistingEntityException {
+        studentXmlRepo.save(new Student(id, nume, grupa));
     }
 
-    public int saveTema(String id, String descriere, int deadline, int startline) {
-        Tema tema = new Tema(id, descriere, deadline, startline);
-        Tema result = temaXmlRepo.save(tema);
-
-        if (result == null) {
-            return 1;
-        }
-        return 0;
+    public void saveTema(String id, String descriere, int deadline, int startline) throws ValidationException, AlreadyExistingEntityException {
+        temaXmlRepo.save(new Tema(id, descriere, deadline, startline));
     }
 
-    public int saveNota(String idStudent, String idTema, double valNota, int predata, String feedback) {
+    public void saveNota(String idStudent, String idTema, double valNota, int predata, String feedback) throws ValidationException, AlreadyExistingEntityException, GradeNonExistentStudentOrHomeworkException {
         if (studentXmlRepo.findOne(idStudent) == null || temaXmlRepo.findOne(idTema) == null) {
-            return -1;
+            throw new GradeNonExistentStudentOrHomeworkException("Inexistent student or homework!\n");
         }
         else {
             int deadline = temaXmlRepo.findOne(idTema).getDeadline();
@@ -61,13 +52,8 @@ public class Service {
             } else {
                 valNota =  valNota - 2.5 * (predata - deadline);
             }
-            Nota nota = new Nota(new Pair(idStudent, idTema), valNota, predata, feedback);
-            Nota result = notaXmlRepo.save(nota);
 
-            if (result == null) {
-                return 1;
-            }
-            return 0;
+            notaXmlRepo.save(new Nota(new Pair(idStudent, idTema), valNota, predata, feedback));
         }
     }
 
