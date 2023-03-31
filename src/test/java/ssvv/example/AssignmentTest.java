@@ -1,5 +1,6 @@
 package ssvv.example;
 
+import exceptions.AlreadyExistingEntityException;
 import exceptions.ValidationException;
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +27,10 @@ public class AssignmentTest{
     private static final Integer VALID_DEADLINE = 14;
     private static final Integer VALID_STARTLINE = 1;
 
-    private static final String ID_ERROR_MESSAGE = "ID invalid! \n";
+    private static final String INVALID_ID_ERROR_MESSAGE = "ID invalid! \n";
+    private static final String INVALID_DESCRIPTION_ERROR_MESSAGE = "Descriere invalida!\n";
+    private static final String INVALID_DEADLINE_ERROR_MESSAGE = "Deadline invalid!\n";
+    private static final String INVALID_STARTLINE_ERROR_MESSAGE = "Data de primire invalida!\n";
 
     private Service service;
 
@@ -67,8 +71,29 @@ public class AssignmentTest{
 
     @Test
     public void addAssignment_Fail_InvalidId() {
-        assertThrows(ValidationException.class, () -> service.saveTema(null, VALID_DESCRIPTION, VALID_DEADLINE, VALID_STARTLINE), ID_ERROR_MESSAGE);
+        assertThrows(ValidationException.class, () -> service.saveTema(null, VALID_DESCRIPTION, VALID_DEADLINE, VALID_STARTLINE), INVALID_ID_ERROR_MESSAGE);
     }
 
+    @Test
+    public void addAssignment_Fail_InvalidDescription() {
+        assertThrows(ValidationException.class, () -> service.saveTema(VALID_ID, null, VALID_DEADLINE, VALID_STARTLINE), INVALID_DESCRIPTION_ERROR_MESSAGE);
+    }
 
+    @Test
+    public void addAssignment_Fail_InvalidDeadline() {
+        assertThrows(ValidationException.class, () -> service.saveTema(VALID_ID, VALID_DESCRIPTION, 0, VALID_STARTLINE), INVALID_DEADLINE_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void addAssignment_Fail_InvalidStartline() {
+        assertThrows(ValidationException.class, () -> service.saveTema(VALID_ID, VALID_DESCRIPTION, VALID_DEADLINE, 0), INVALID_STARTLINE_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void addAssignment_Fail_EntityWithIdAlreadyPresent() {
+        assertThrows(AlreadyExistingEntityException.class, () -> {
+            service.saveTema(VALID_ID, VALID_DESCRIPTION, VALID_DEADLINE, VALID_STARTLINE);
+            service.saveTema(VALID_ID, "Another Description", VALID_DEADLINE, VALID_STARTLINE);
+        });
+    }
 }
