@@ -25,9 +25,6 @@ public class StudentTest {
     private static final String VALID_NAME = "George";
     private static final int VALID_GROUP = 937;
 
-    private static final String STUDENT_TEST_XML_FILE = "student_test.xml";
-    private static final String HOMEWORK_TEST_XML_FILE = "homework_test.xml";
-    private static final String GRADES_TEST_XML_FILE = "grade_test.xml";
 
     private static final String INVALID_ID_ERROR_MESSAGE = "ID invalid!\n";
     private static final String INVALID_NAME_ERROR_MESSAGE = "Nume invalid!\n";
@@ -35,23 +32,12 @@ public class StudentTest {
 
     private Service service;
 
-    private File createXMLFile(String fileName) throws IOException {
-        File createdFile = new File(fileName);
-        if (createdFile.createNewFile()) {
-            try (FileWriter fileWriter = new FileWriter(createdFile)) {
-                fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<Entitati>\n</Entitati>");
-            }
-        } else {
-            throw new RuntimeException("File " + fileName + " could not be created!");
-        }
-        return createdFile;
-    }
 
     @Before
     public void setUp() throws IOException {
-        File studentFile = createXMLFile(STUDENT_TEST_XML_FILE);
-        File temeFile = createXMLFile(HOMEWORK_TEST_XML_FILE);
-        File noteFile = createXMLFile(GRADES_TEST_XML_FILE);
+        File studentFile = TestUtils.createXMLFile(TestUtils.STUDENT_TEST_XML_FILE);
+        File temeFile = TestUtils.createXMLFile(TestUtils.HOMEWORK_TEST_XML_FILE);
+        File noteFile = TestUtils.createXMLFile(TestUtils.GRADES_TEST_XML_FILE);
 
         StudentXMLRepository fileRepository1 = new StudentXMLRepository(new StudentValidator(), studentFile.getPath());
         TemaXMLRepository fileRepository2 = new TemaXMLRepository(new TemaValidator(), temeFile.getPath());
@@ -61,9 +47,9 @@ public class StudentTest {
 
     @After
     public void tearDown() {
-        new File(STUDENT_TEST_XML_FILE).delete();
-        new File(HOMEWORK_TEST_XML_FILE).delete();
-        new File(GRADES_TEST_XML_FILE).delete();
+        new File(TestUtils.STUDENT_TEST_XML_FILE).delete();
+        new File(TestUtils.HOMEWORK_TEST_XML_FILE).delete();
+        new File(TestUtils.GRADES_TEST_XML_FILE).delete();
     }
 
     @Test
